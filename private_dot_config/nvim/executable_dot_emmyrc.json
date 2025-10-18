@@ -1,0 +1,21 @@
+{
+    "$schema": "https://raw.githubusercontent.com/EmmyLuaLs/emmylua-analyzer-rust/refs/heads/main/crates/emmylua_code_analysis/resources/schema.json",
+    "workspace": {
+        "enableReindex": true,
+        "encoding": "utf-8",
+        "ignoreDir": [],
+        "ignoreGlobs": [],
+        "library": [
+            "/home/caio/.config/nvim",
+            "/home/caio/.local/share/nvim",
+            "/usr/share/nvim/runtime",
+            "/home/caio/codes/forks/lua-language-server/meta/3rd/luv/library"
+        ],
+        "moduleMap": [],
+        "preloadFileSize": 0,
+        "reindexDuration": 5000,
+        "workspaceRoots": [
+            "/home/caio/.config/nvim"
+        ]
+    }
+}

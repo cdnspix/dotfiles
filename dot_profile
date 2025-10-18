@@ -1,12 +1,4 @@
-__append_path() {
-    case ":$PATH:" in
-    *:"$1":*) ;;
-    *)
-        PATH="${PATH:+$PATH:}$1"
-        ;;
-    esac
-}
-
+umask u=rwx,g=rx,o=rx
 __prepend_path() {
     case ":$PATH:" in
     *:"$1":*) ;;
@@ -15,19 +7,22 @@ __prepend_path() {
         ;;
     esac
 }
-
+__prepend_path '/home/caio/bin'
 __prepend_path '/home/caio/.local/bin'
+__prepend_path '/home/caio/.local/share/fnm'
 __prepend_path '/home/caio/.cargo/bin'
 __prepend_path '/home/caio/.bun/bin'
 __prepend_path '/home/caio/.deno/bin'
 __prepend_path '/home/caio/go/bin'
-__prepend_path '/home/caio/bin'
-
+__prepend_path '/home/caio/.local/share/pnpm'
+eval $(fnm env)
 export PATH
-
-unset -f __append_path
 unset -f __prepend_path
-
-test $(tty) = '/dev/tty1' && (\
-    exec start-sway
-)
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+export XKB_DEFAULT_LAYOUT=br
+export XKB_DEFAULT_MODEL=pc105
+export XKB_DEFAULT_OPTIONS=
+[[ $(tty) == '/dev/tty1' ]] && start-sway

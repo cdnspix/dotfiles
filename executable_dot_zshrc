@@ -1,0 +1,120 @@
+setopt sharehistory
+setopt noclobber
+setopt extendedglob
+
+KEYTIMEOUT=1
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=100000
+SAVEHIST=1000000000
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_USE_ASYNC=1
+
+export PS1=$'\033[34m%n\033[39m \033[35m%~\033[39m\n'
+export RPS1=''
+# export RPS1=$'%^'
+export PS2=''
+export PS3='%#'
+export PS4='+%N:%i'
+export EDITOR=nvim
+export NODE_OPTIONS=--max-old-space-size=24000
+export GOPROXY=direct
+export PAGER=bat
+export BAT_PAGER="less -R"
+export BAT_STYLE=plain
+export BROWSER=firefox
+export BAT_THEME=ansi
+export MAN_KEEP_FORMATTING=1
+export MANPAGER="less -R --use-color -Dd+y -Du+g"
+export MANROFFOPT="-P -c"
+export COTP_DB_PATH="$HOME/.cotp/db.cotp"
+list-or-read() {
+    while (( # > 0 )); do
+        if [[ -f "$1" ]]; then
+            sudo bat "$1";
+        elif [[ -d "$1" ]]; then
+            sudo lsd -Alh --color=always "$1" | bat;
+        fi
+        shift
+    done
+}
+
+alias man="man --nh"
+lolcat() {
+    uvx gay -t "$(shuf -n1 <(printf %s\\n -l -g -b -t -a -p -n --gq --mlm --aro --ply --db --dg --ag --bg --gf --abro --nt --tri))"
+}
+alias ffmpeg="ffmpeg -hide_banner"
+alias chrome=google-chrome-stable
+alias cle='printf "\\033[2J\\033[3J\\033[1;1H"'
+alias l="lsd"
+alias ll="2>/dev/null lsd -l"
+alias lls="2>/dev/null lsd -l --total-size"
+
+__prepend_fpath() {
+    case ":$FPATH:" in
+    *:"$1":*) ;;
+    *)
+        FPATH="$1${FPATH:+:$FPATH}"
+        ;;
+    esac
+}
+__prepend_fpath '/home/caio/.local/share/zinit/completions'
+__prepend_fpath '/home/caio/.local/share/zsh/completions'
+unset __prepend_fpath
+export FPATH
+
+zstyle ':completion:*' auto-description '%d...'
+zstyle ':completion:*' completer _expand _complete
+zstyle ':completion:*' file-sort name
+zstyle ':completion:*' format '%d...'
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' list-colors ''
+zstyle ':completion:*' matcher-list '' 'm:{[:lower:]}={[:upper:]}' 'r:|[._-]=** r:|=**' 'l:|=* r:|=*'
+zstyle ':completion:*' menu select=0
+zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+zstyle ':completion:*' use-compctl false
+zstyle ':completion:*' verbose true
+zstyle :compinstall filename '/home/caio/.zshrc'
+
+autoload -z compaudit compinit colors
+colors
+compaudit
+compinit
+
+_s() { [[ ! -f "$1" ]] && printf 'Could not find %s\n' "$1" || source "$1" ${@:2} }
+_z() { _s "/home/caio/.local/zsh-plugins/$1/$1.plugin.zsh" ${@:2} }
+_oz() { _s "/home/caio/.local/zsh-plugins/ohmyzsh/plugins/$1/$1.plugin.zsh" ${@:2} }
+
+source /home/caio/.zoxidecomp
+source /home/caio/.denocomp
+source /home/caio/.ngcomp
+source /home/caio/.bun/_bun
+# setopt clobber
+# zoxide init zsh >/home/caio/.zoxidecomp &!
+# deno completions zsh >/home/caio/.denocomp &!
+# ng completion script >/home/caio/.ngcomp &!
+# bun completions &>/dev/null &!
+# setopt noclobber
+
+_z zsh-completions
+_z zsh-autosuggestions
+_oz zsh-navigation-tools
+_oz archlinux
+_oz systemd
+_s /usr/share/doc/filkoll/command-not-found.zsh
+_oz git-extras
+_z zsh-syntax-highlighting
+
+ZVM_LAZY_KEYBINDINGS=false
+ZVM_INIT_MODE=sourcing
+ZVM_ESCAPE_KEYTIMEOUT=0.0001
+ZVM_KEYTIMEOUT=999
+zvm_config() {
+    ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
+    ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BEAM
+    ZVM_OPPEND_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
+}
+ZVM_INIT_MODE=sourcing
+_z zsh-vi-mode
+zle -N zsh-history-widget
+bindkey '^r' znt-history-widget
+unset _s _z _oz
