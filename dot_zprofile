@@ -1,0 +1,25 @@
+init_sway() {
+    export XCURSOR_SIZE=96
+    export XCURSOR_THEME=default
+    export XDG_SESSION_TYPE=wayland
+    export XDG_CURRENT_SESSION=sway
+    export QT_QPA_PLATFORMTHEME=qt6ct
+    # export QT_QPA_PLATFORMTHEME=kvantum
+    export QT_QPA_PLATFORM=wayland
+    # export QT_SCALE_FACTOR=0.75
+    export QT_FONT_DPI=72
+    export ELECTRON_OZONE_PLATFORM_HINT=wayland
+    export GTK_USE_PORTAL=1
+    export _JAVA_AWT_WM_NONREPARENTING=1
+    export WLR_RENDERER=vulkan
+    export WLR_DRM_NO_ATOMIC=1
+    export WLR_DRM_NO_MODIFIERS=1
+    export WLR_DRM_NO_HARDWARE_CURSORS=1
+    export WLR_SCENE_DISABLE_VISIBILITY=1
+    # export WLR_SCENE_DISABLE_DIRECT_SCANOUT=1
+    # export WLR_RENDER_NO_EXPLICIT_SYNC=1
+    exec systemd-cat --identifier=sway sway
+}
+if [[ ! -v WAYLAND_DISPLAY ]] && [[ $(tty) == /dev/tty1 ]]; then
+    init_sway
+fi

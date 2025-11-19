@@ -1,0 +1,29 @@
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+export XKB_DEFAULT_LAYOUT=br
+export XKB_DEFAULT_MODEL=pc105
+export XKB_DEFAULT_OPTIONS=
+export EDITOR=nvim
+export BROWSER=firefox
+export NODE_OPTIONS=--max-old-space-size=24000
+export GOPROXY=direct
+prepend_path() {
+    case ":$PATH:" in
+        *:"$1":*)
+            ;;
+        *)
+            PATH="$1:${PATH+$PATH}"
+    esac
+}
+prepend_path "$HOME/bin"
+prepend_path "$HOME/.local/bin"
+prepend_path "$HOME/.local/share/fnm"
+prepend_path "$HOME/.cargo/bin"
+# prepend_path "$HOME/.bun/bin"
+# prepend_path "$HOME/.deno/bin"
+prepend_path "$HOME/go/bin"
+if [[ ! -v FNM_MULTISHELL_PATH ]]; then
+    source <(fnm env)
+fi

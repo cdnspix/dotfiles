@@ -1,0 +1,51 @@
+source /etc/profile
+# [ -z "$HOME" ] && export HOME="/home/$(whoami)"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+export XKB_DEFAULT_LAYOUT=br
+export XKB_DEFAULT_MODEL=pc105
+export XKB_DEFAULT_OPTIONS=
+export PNPM_HOME='/home/caio/.local/share/pnpm'
+prepend_path() {
+    case ":$PATH:" in
+        *:"$1":*)
+            ;;
+        *)
+            PATH="$1:${PATH+$PATH}"
+    esac
+}
+prepend_path "$HOME/bin"
+prepend_path "$HOME/.local/bin"
+prepend_path "$HOME/.local/share/fnm"
+prepend_path "$HOME/.cargo/bin"
+prepend_path "$HOME/.bun/bin"
+prepend_path "$HOME/.deno/bin"
+prepend_path "$HOME/go/bin"
+prepend_path "$PNPM_HOME"
+/usr/bin/test $FNM_MULTISHELL_PATH  || source <(fnm env)
+init_sway() {
+    export XCURSOR_SIZE=96
+    export XCURSOR_THEME=default
+    export XDG_SESSION_TYPE=wayland
+    export XDG_CURRENT_SESSION=sway
+    export QT_QPA_PLATFORMTHEME=qt6ct
+    # export QT_QPA_PLATFORMTHEME=kvantum
+    export QT_QPA_PLATFORM=wayland
+    # export QT_SCALE_FACTOR=0.75
+    export QT_FONT_DPI=72
+    export ELECTRON_OZONE_PLATFORM_HINT=wayland
+    export GTK_USE_PORTAL=1
+    export _JAVA_AWT_WM_NONREPARENTING=1
+    export WLR_RENDERER=vulkan
+    export WLR_DRM_NO_ATOMIC=1
+    export WLR_DRM_NO_MODIFIERS=1
+    export WLR_DRM_NO_HARDWARE_CURSORS=1
+    export WLR_SCENE_DISABLE_VISIBILITY=1
+    # export WLR_SCENE_DISABLE_DIRECT_SCANOUT=1
+    # export WLR_RENDER_NO_EXPLICIT_SYNC=1
+    exec systemd-cat --identifier=sway sway
+}
+[ -z "$WAYLAND_DISPLAY" ] && [ $(tty) = /dev/tty1 ] && init_sway
+# systemctl --user import-environment PATH
